@@ -10,6 +10,7 @@ const todoList = (req,res)=>{
  }else{
     const todoData = new Todo({
         item,
+        userId:req.userId
     })
     todoData.save();
 
@@ -19,15 +20,16 @@ const todoList = (req,res)=>{
 
 const getTodoList = async (req,res)=>{
     try{
-           const data = await Todo.find({})
+        const data = await Todo.find({userId: req.userId})
         if(!data){
             return res.status(500).json({
                 message: "Internal server error"
             })
         }else{
-            return res.status(200).json(data)
+            return res.status(200).json({data})
+
         }
-        
+            
     }catch{
         return res.status(500).json({
             message: "Internal server error"

@@ -36,8 +36,11 @@ const Login = async (req,res) =>{
     const match = await bcrypt.compare(password,user.password)
     if(!match) return res.send({message:"password not match"})
 
-    jwt.sign({user},secKey,{expiresIn:'300s'},(err,token)=>{
+    jwt.sign({userId:user._id},secKey,{expiresIn:'3000s'},(err,token)=>{
         
+      // res.cookie('token',token,{
+      //   httpOnly:true
+      // })
       res.status(200).json({
         message:"Login SuccessFully",
         token:token
