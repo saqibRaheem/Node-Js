@@ -1,5 +1,7 @@
 const Users = require("../model/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
+const secKey = "asdfghjkl"
 
 const Signup = (req, res) => {
   const { name, email, password, phone } = req.body;
@@ -33,8 +35,15 @@ const Login = async (req,res) =>{
       
     const match = await bcrypt.compare(password,user.password)
     if(!match) return res.send({message:"password not match"})
-   
-    res.send({message:"Logiin SuccessFully"})
+
+    jwt.sign({user},secKey,{expiresIn:'300s'},(err,token)=>{
+        
+      res.status(200).json({
+        message:"Login SuccessFully",
+        token:token
+      })
+    })
+    // res.send({message:"Logiin SuccessFully"})
     
   }catch(err){
   return res.status(500).json({msg:err.message})
